@@ -1,0 +1,37 @@
+To push committed changes to Heroku app:
+    git push heroku master
+    git push pro master & git push stage master (for both production & staging environments)
+
+To add a remote repo:
+    git remote add [REMOTE_NAME] [REMOTE_LINK]
+
+To change the app to which changes are pushed to:
+    heroku git:remote -a [APP_NAME]
+
+To create a Heroku app:
+    heroku create [APP_NAME]
+
+Pip:
+To remove all packages:
+    pip freeze > [filename].txt
+    pip uninstall -r [filename].txt
+
+To install from requirements
+    pip install -r ref/requirements.txt --upgrade
+
+Misc:
+    git init
+    git add .
+    git commit -m "[MESSAGE]"
+    echo "echo 'whoa'" > .env
+
+To log out as git user:
+    git config --global --unset user.name
+    git config --global --unset user.email
+
+To initialize virtual environment:
+    mkvirtualenv [NAME]
+To activate:
+    workon [NAME]
+To deactivate:
+    deactivate
