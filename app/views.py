@@ -8,13 +8,15 @@ from flask import render_template, flash, redirect, session, url_for, request, g
 # The g global is setup by Flask as a place to store and share data during the life of a request (e.g. logged in users)
 from flask_login import login_user, logout_user, current_user, login_required
 from datetime import datetime
+from flask_babel import gettext
 
-from app import app, db, lm, oid  # importing object from current module
+from app import app, db, lm, oid, babel  # importing object from current module
 from .forms import LoginForm, EditForm, PostForm  # importing class from another file in current module
 from .models import User, Post
 from .emails import follower_notification
-from config import POSTS_PER_PAGE
+from config import POSTS_PER_PAGE, LANGUAGES
 
+# use requests object (no need to specify as function argument) to access info in POST request
 
 @app.route('/', methods=['GET', 'POST'])
 @app.route('/index', methods=['GET', 'POST'])
@@ -50,13 +52,14 @@ def login():
 @oid.after_login
 def after_login(resp):
     if resp.email is None or resp.email == "":
-        flash('Invalid login. Please try again.')
+        flash(gettext('Invalid login. Please try again.'))
         return redirect(url_for('login'))
     user = User.query.filter_by(email=resp.email).first()
     if user is None:
         nickname = resp.nickname
         if nickname is None or nickname == "":
             nickname = resp.email.split('@')[0]
+        nickname = User.make_valid_nickname(nickname)
         nickname = User.make_unique_nickname(nickname)
         user = User(nickname=nickname, email=resp.email)
         db.session.add(user)
@@ -148,9 +151,29 @@ def unfollow(nickname):
     return redirect(url_for('user', nickname=nickname))
 
 
+@app.route('/delete/<int:id>')
+@login_required
+def delete(id):
+    post = Post.query.get(id)
+    if post is None:
+        flash('Post not found.')
+        return redirect(url_for('index'))
+    if post.author.id != g.user.id:
+        flash('You cannot delete this post.')
+        return redirect(url_for('index'))
+    db.session.delete(post)
+    db.session.commit()
+    flash('Your post has been deleted.')
+    return redirect(url_for('index'))
+
+
 @lm.user_loader
 def load_user(id):
     return User.query.get(int(id))
+
+@babel.localeselector  # called before each request to give us a chance to choose the language of the response
+def get_locale():
+    return request.accept_languages.best_match(LANGUAGES.keys())
 
 ## HTTP error handlers
 @app.errorhandler(404)

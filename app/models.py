@@ -1,5 +1,6 @@
 from app import db
 from hashlib import md5
+from re import sub
 
 
 # association table for querying followers and following
@@ -59,6 +60,10 @@ class User(db.Model):
             version += 1
         return new_nickname
 
+    @staticmethod
+    def make_valid_nickname(nickname):
+        return sub('[^a-zA-Z0-9_\.]', '', nickname)
+
     @property
     def is_authenticated(self):
         return True
@@ -80,10 +85,15 @@ class User(db.Model):
     #u = models.User.query.get(1)
 
 class Post(db.Model):
+    __searchable__ = ['body']
+
     id = db.Column(db.Integer, primary_key = True)
     body = db.Column(db.String(140))
     timestamp = db.Column(db.DateTime)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    language = db.Column(db.String(5))  # used to store language of each post for AJAX translation
+                                        # AJAX allows for page to be updated without having to reload the entire page again
+                                        # https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xv-ajax-legacy
 
     def __repr__(self):
         return '<Post %r>' % (self.body)

@@ -49,6 +49,13 @@ if not app.debug:
     app.logger.addHandler(file_handler)
     app.logger.info('microblog startup')
 
+# currently momentjs doesn't work :/ nothing displays on webpage
+from .momentjs import momentjs
+app.jinja_env.globals['momentjs'] = momentjs
+
+from flask_babel import Babel
+babel = Babel(app)
+
 from app import views, models
 # views imports the variables defined above
 

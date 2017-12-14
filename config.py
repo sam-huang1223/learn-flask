@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 import os
 basedir = os.path.abspath(os.path.dirname(__file__))
 
@@ -23,3 +25,10 @@ ADMINS = ['sam.huang2019@gmail.com']
 
 # pagination
 POSTS_PER_PAGE = 3
+
+# available languages
+# for translation implementation guide: https://blog.miguelgrinberg.com/post/the-flask-mega-tutorial-part-xiv-i18n-and-l10n-legacy
+LANGUAGES = {
+    'en': 'English',
+    'es': 'Español'
+}

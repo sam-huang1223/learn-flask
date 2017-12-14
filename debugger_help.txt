@@ -1,0 +1,2 @@
+import pdb; pdb.set_trace() # to set breakpoint in code
+bt # command in pdb prompt to get stack trace

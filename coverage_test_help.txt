@@ -1,0 +1,43 @@
+'''
+A test coverage tool can observe a running application and take note of which lines of code 
+execute and which do not. After execution ends it can produce a report showing what lines have 
+not executed. If we had such report for our test suite we would know right away what parts of 
+our code need tests that exercise them.
+
+Python has a coverage tool that we can use called simply coverage that we installed way back 
+when we started this tutorial. This tool can be used as a command line tool or can also be 
+started from inside a script. To make it easier to not forget to run it we will go with the latter.
+
+'''
+
+from coverage import coverage
+cov = coverage(branch=True, omit=['flask/*', 'tests.py'])
+cov.start()
+
+# test suite functions
+
+if __name__ == '__main__':
+    try:
+        unittest.main()
+    except:
+        pass
+    cov.stop()
+    cov.save()
+    print("\n\nCoverage Report:\n")
+    cov.report()
+    print("HTML version: " + os.path.join(basedir, "tmp/coverage/index.html"))
+    cov.html_report(directory='tmp/coverage')
+    cov.erase()
+
+'''
+We begin by initializing the coverage module at the very top of the script. The branch = True argument 
+requests that branch analysis is done in addition to regular line based coverage. The omit argument makes 
+sure we do not get coverage report for the modules we have installed in our virtual environment and for the
+unit testing framework itself, we just want coverage for our application code.
+
+To gather coverage statistics we just call cov.start(), then run our unit tests. We have to catch and pass 
+exceptions from the unit testing framework, because if not the script would end without giving us a chance 
+to produce a coverage report. After we are back from the testing we stop coverage with cov.stop(), and write 
+the results with cov.save(). Finally, cov.report() dumps the data to the console, cov.html_report() generates 
+a nicer HTML report with the same date, and cov.erase() deletes the data file.
+'''

@@ -1,4 +1,28 @@
 <html>
+  <!-- <script src="/static/js/moment.min.js"></script>
+  <script>
+  function translate(sourceLang, destLang, sourceId, destId, loadingId) {
+    $(destId).hide();
+    $(loadingId).show();
+    $.post('/translate', {
+        text: $(sourceId).text(),
+        sourceLang: sourceLang,
+        destLang: destLang
+    }).done(function(translated) {
+        $(destId).text(translated['text'])
+        $(loadingId).hide();
+        $(destId).show();
+    }).fail(function() {
+        $(destId).text("{{ _('Error: Could not contact server.') }}");
+        $(loadingId).hide();
+        $(destId).show();
+    });
+  }
+  </script>
+  # The $.post function issues a POST request that to the server will be identical to a request issued by the
+  # browser when a form is submitted. The difference is that in the client this request happens in the background
+  # without causing a page reload.
+  -->
   <head>
     {% if title %}
     <title>{{ title }} - microblog</title>
@@ -27,3 +51,4 @@
     {% block content %}{% endblock %}
   </body>
 </html>
+

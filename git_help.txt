@@ -1,0 +1,10 @@
+education.github.com/git-cheat-sheet-education.pdf
+
+https://help.github.com/articles/fork-a-repo/
+https://help.github.com/articles/syncing-a-fork/
+
+To remove from staging area:
+	git rm --cached -r [directory]
+
+To remove all changes to files to be staged:
+	git reset --hard
